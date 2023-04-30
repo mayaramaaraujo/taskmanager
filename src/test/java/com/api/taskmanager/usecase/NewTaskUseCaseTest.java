@@ -1,7 +1,6 @@
 package com.api.taskmanager.usecase;
 
-import com.api.taskmanager.entity.types.Type;
-import com.api.taskmanager.usecase.gateway.TaskSaverGateway;
+import com.api.taskmanager.usecase.gateway.TaskVerifierGateway;
 import com.api.taskmanager.usecase.gateway.model.request.TaskSaverRequestModel;
 import com.api.taskmanager.usecase.gateway.model.response.TaskSaverResponseModel;
 import com.api.taskmanager.usecase.model.request.NewTaskRequestModel;
@@ -21,17 +20,17 @@ import static org.mockito.Mockito.when;
 public class NewTaskUseCaseTest {
 
   @Mock
-  TaskSaverGateway taskSaverGateway;
+  TaskVerifierGateway taskVerifierGateway;
 
   @InjectMocks
   NewTaskUseCase newTaskUseCase;
 
   @Test
   public void given_ValidTaskRequestModel_shouldReturnSuccess() {
-    NewTaskRequestModel requestModel = new NewTaskRequestModel("to do", "to do something", Type.URGENT);
+    NewTaskRequestModel requestModel = new NewTaskRequestModel("to do", "to do something", "URGENT");
 
     TaskSaverResponseModel taskSaverResponseModel = new TaskSaverResponseModel(true, "");
-    when(taskSaverGateway.verify(any(TaskSaverRequestModel.class))).thenReturn(taskSaverResponseModel);
+    when(taskVerifierGateway.verify(any(TaskSaverRequestModel.class))).thenReturn(taskSaverResponseModel);
 
     NewTaskResponseModel responseModel = newTaskUseCase.execute(requestModel);
 
@@ -40,7 +39,7 @@ public class NewTaskUseCaseTest {
 
   @Test
   public void given_InvalidTaskRequestModel_shouldReturnError() {
-    NewTaskRequestModel requestModel = new NewTaskRequestModel("", "to do something", Type.IMPORTANT);
+    NewTaskRequestModel requestModel = new NewTaskRequestModel("", "to do something", "IMPORTANT");
     NewTaskResponseModel responseModel = newTaskUseCase.execute(requestModel);
 
     assertFalse(responseModel.success());
@@ -48,10 +47,10 @@ public class NewTaskUseCaseTest {
 
   @Test
   public void given_ErrorOnTaskSaverGateway_shouldReturnError() {
-    NewTaskRequestModel requestModel = new NewTaskRequestModel("title", "to do something", Type.URGENT);
+    NewTaskRequestModel requestModel = new NewTaskRequestModel("title", "to do something", "URGENT");
 
     TaskSaverResponseModel taskSaverResponseModel = new TaskSaverResponseModel(false, "Could not saver task");
-    when(taskSaverGateway.verify(any(TaskSaverRequestModel.class))).thenReturn(taskSaverResponseModel);
+    when(taskVerifierGateway.verify(any(TaskSaverRequestModel.class))).thenReturn(taskSaverResponseModel);
 
     NewTaskResponseModel responseModel = newTaskUseCase.execute(requestModel);
 
