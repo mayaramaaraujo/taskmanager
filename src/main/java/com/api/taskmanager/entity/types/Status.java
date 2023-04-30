@@ -5,7 +5,7 @@ public enum Status {
   DOING,
   DONE;
 
-  static Status fromString(String text) {
+  public static Status fromString(String text) {
     switch (text.toLowerCase()) {
       case "doing": {
         return DOING;

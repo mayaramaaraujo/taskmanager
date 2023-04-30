@@ -5,7 +5,7 @@ public enum Type {
   IMPORTANT,
   URGENT;
 
-  static Type fromString(String text) {
+  public static Type fromString(String text) {
     switch (text.toLowerCase()) {
       case "important": {
         return IMPORTANT;

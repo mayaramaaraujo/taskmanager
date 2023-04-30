@@ -2,9 +2,10 @@ package com.api.taskmanager.usecase;
 
 import com.api.taskmanager.entity.Task;
 import com.api.taskmanager.entity.types.Status;
+import com.api.taskmanager.entity.types.Type;
 import com.api.taskmanager.usecase.exception.BadTaskException;
 import com.api.taskmanager.usecase.exception.CouldNotVerifySaverException;
-import com.api.taskmanager.usecase.gateway.TaskSaverGateway;
+import com.api.taskmanager.usecase.gateway.TaskVerifierGateway;
 import com.api.taskmanager.usecase.gateway.model.request.TaskSaverRequestModel;
 import com.api.taskmanager.usecase.gateway.model.response.TaskSaverResponseModel;
 import com.api.taskmanager.usecase.model.request.NewTaskRequestModel;
@@ -12,10 +13,10 @@ import com.api.taskmanager.usecase.model.response.NewTaskResponseModel;
 
 public class NewTaskUseCase {
 
-  private TaskSaverGateway taskSaverGateway;
+  private TaskVerifierGateway taskVerifierGateway;
 
-  public NewTaskUseCase(TaskSaverGateway taskSaverGateway) {
-    this.taskSaverGateway = taskSaverGateway;
+  public NewTaskUseCase(TaskVerifierGateway taskVerifierGateway) {
+    this.taskVerifierGateway = taskVerifierGateway;
   }
 
   public NewTaskResponseModel execute(NewTaskRequestModel requestModel) {
@@ -23,7 +24,7 @@ public class NewTaskUseCase {
       Task task = new Task(
           requestModel.title(),
           requestModel.description(),
-          requestModel.type(),
+          Type.fromString(requestModel.type()),
           Status.TO_DO
       );
 
@@ -32,10 +33,10 @@ public class NewTaskUseCase {
       }
 
       TaskSaverRequestModel taskSaverRequestModel = new TaskSaverRequestModel(task.getTitle(), task.getDescription(), task.getCreatedDate(), task.getDeadline(), task.getType(), task.getStatus());
-      TaskSaverResponseModel taskSaverResponseModel = taskSaverGateway.verify(taskSaverRequestModel);
+      TaskSaverResponseModel taskSaverResponseModel = taskVerifierGateway.verify(taskSaverRequestModel);
 
       if(!taskSaverResponseModel.success()) {
-        throw new CouldNotVerifySaverException("Could save task on database: " + taskSaverResponseModel.errorMessage());
+        throw new CouldNotVerifySaverException("Could not verify task saver: " + taskSaverResponseModel.errorMessage());
       }
 
       return new NewTaskResponseModel(true, "");

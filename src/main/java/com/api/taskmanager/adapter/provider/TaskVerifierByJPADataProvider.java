@@ -1,10 +1,10 @@
 package com.api.taskmanager.adapter.provider;
 
-import com.api.taskmanager.usecase.gateway.TaskSaverGateway;
+import com.api.taskmanager.usecase.gateway.TaskVerifierGateway;
 import com.api.taskmanager.usecase.gateway.model.request.TaskSaverRequestModel;
 import com.api.taskmanager.usecase.gateway.model.response.TaskSaverResponseModel;
 
-public class TaskSaverByJPADataProvider implements TaskSaverGateway {
+public class TaskVerifierByJPADataProvider implements TaskVerifierGateway {
 
   @Override
   public TaskSaverResponseModel verify(TaskSaverRequestModel requestModel) {
