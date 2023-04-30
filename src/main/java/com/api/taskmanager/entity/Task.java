@@ -11,20 +11,29 @@ public class Task {
   private final String description;
   private final LocalDateTime createdDate;
   private final LocalDateTime deadline;
-  private final LocalDateTime startDate;
-  private final LocalDateTime endDate;
+  private LocalDateTime startDate;
+  private LocalDateTime completionDate;
   private final Type type;
   private final Status status;
 
-  public Task(String title, String description, LocalDateTime deadline, LocalDateTime startDate, LocalDateTime endDate, Type type, Status status) {
+  public Task(String title, String description, Type type, Status status) {
     this.title = title;
     this.description = description;
     this.createdDate = LocalDateTime.now();
-    this.deadline = deadline;
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.deadline = generateDeadline(type);
     this.type = type;
     this.status = status;
+  }
+
+  private LocalDateTime generateDeadline(Type type) {
+    switch (type) {
+      case URGENT:
+        return createdDate.plusDays(3);
+      case IMPORTANT:
+        return createdDate.plusDays(7);
+      default:
+        return this.createdDate.plusDays(21);
+    }
   }
 
   public boolean isValid() {
@@ -37,14 +46,6 @@ public class Task {
     }
 
     if(deadline == null) {
-      return false;
-    }
-
-    if(startDate == null || startDate.isBefore(LocalDateTime.now())) {
-      return false;
-    }
-
-    if(endDate == null || endDate.isBefore(LocalDateTime.now())) {
       return false;
     }
 
@@ -79,8 +80,8 @@ public class Task {
     return startDate;
   }
 
-  public LocalDateTime getEndDate() {
-    return endDate;
+  public LocalDateTime getCompletionDate() {
+    return completionDate;
   }
 
   public Type getType() {
@@ -96,12 +97,12 @@ public class Task {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Task task = (Task) o;
-    return Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(createdDate, task.createdDate) && Objects.equals(deadline, task.deadline) && Objects.equals(startDate, task.startDate) && Objects.equals(endDate, task.endDate) && type == task.type && status == task.status;
+    return Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(createdDate, task.createdDate) && Objects.equals(deadline, task.deadline) && Objects.equals(startDate, task.startDate) && Objects.equals(completionDate, task.completionDate) && type == task.type && status == task.status;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, description, createdDate, deadline, startDate, endDate, type, status);
+    return Objects.hash(title, description, createdDate, deadline, startDate, completionDate, type, status);
   }
 
   @Override
@@ -112,7 +113,7 @@ public class Task {
         ", createdDate=" + createdDate +
         ", deadline=" + deadline +
         ", startDate=" + startDate +
-        ", endDate=" + endDate +
+        ", completionDate=" + completionDate +
         ", type=" + type +
         ", status=" + status +
         '}';
