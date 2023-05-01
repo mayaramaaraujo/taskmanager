@@ -1,7 +1,6 @@
 package com.api.taskmanager.usecase;
 
 import com.api.taskmanager.entity.Task;
-import com.api.taskmanager.entity.types.Status;
 import com.api.taskmanager.entity.types.Type;
 import com.api.taskmanager.usecase.exception.BadTaskException;
 import com.api.taskmanager.usecase.exception.CouldNotVerifySaverException;
@@ -24,8 +23,7 @@ public class NewTaskUseCase {
       Task task = new Task(
           requestModel.title(),
           requestModel.description(),
-          Type.fromString(requestModel.type()),
-          Status.TO_DO
+          Type.fromString(requestModel.type())
       );
 
       if(!task.isValid()) {
