@@ -5,18 +5,18 @@ import com.api.taskmanager.entity.types.Status;
 import com.api.taskmanager.entity.types.Type;
 import com.api.taskmanager.usecase.exception.BadTaskException;
 import com.api.taskmanager.usecase.exception.CouldNotVerifySaverException;
-import com.api.taskmanager.usecase.gateway.TaskVerifierGateway;
-import com.api.taskmanager.usecase.gateway.model.request.TaskSaverRequestModel;
-import com.api.taskmanager.usecase.gateway.model.response.TaskSaverResponseModel;
+import com.api.taskmanager.usecase.gateway.NewTaskVerifierGateway;
+import com.api.taskmanager.usecase.gateway.model.request.NewTaskVerifierRequestModel;
+import com.api.taskmanager.usecase.gateway.model.response.NewTaskVerifierResponseModel;
 import com.api.taskmanager.usecase.model.request.NewTaskRequestModel;
 import com.api.taskmanager.usecase.model.response.NewTaskResponseModel;
 
 public class NewTaskUseCase {
 
-  private TaskVerifierGateway taskVerifierGateway;
+  private final NewTaskVerifierGateway newTaskVerifierGateway;
 
-  public NewTaskUseCase(TaskVerifierGateway taskVerifierGateway) {
-    this.taskVerifierGateway = taskVerifierGateway;
+  public NewTaskUseCase(NewTaskVerifierGateway newTaskVerifierGateway) {
+    this.newTaskVerifierGateway = newTaskVerifierGateway;
   }
 
   public NewTaskResponseModel execute(NewTaskRequestModel requestModel) {
@@ -32,11 +32,11 @@ public class NewTaskUseCase {
         throw new BadTaskException("Task data is invalid: " + task);
       }
 
-      TaskSaverRequestModel taskSaverRequestModel = new TaskSaverRequestModel(task.getTitle(), task.getDescription(), task.getCreatedDate(), task.getDeadline(), task.getType(), task.getStatus());
-      TaskSaverResponseModel taskSaverResponseModel = taskVerifierGateway.verify(taskSaverRequestModel);
+      NewTaskVerifierRequestModel newTaskVerifierRequestModel = new NewTaskVerifierRequestModel(task.getTitle(), task.getDescription(), task.getCreatedDate(), task.getDeadline(), task.getType(), task.getStatus());
+      NewTaskVerifierResponseModel newTaskVerifierResponseModel = newTaskVerifierGateway.verify(newTaskVerifierRequestModel);
 
-      if(!taskSaverResponseModel.success()) {
-        throw new CouldNotVerifySaverException("Could not verify task saver: " + taskSaverResponseModel.errorMessage());
+      if(!newTaskVerifierResponseModel.success()) {
+        throw new CouldNotVerifySaverException("Could not verify task saver: " + newTaskVerifierResponseModel.errorMessage());
       }
 
       return new NewTaskResponseModel(true, "");
