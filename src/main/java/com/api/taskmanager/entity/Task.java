@@ -9,12 +9,12 @@ import java.util.Objects;
 public class Task {
   private final String title;
   private final String description;
-  private final LocalDateTime createdDate;
-  private final LocalDateTime deadline;
+  private LocalDateTime createdDate;
+  private LocalDateTime deadline;
   private LocalDateTime startDate;
   private LocalDateTime completionDate;
   private final Type type;
-  private final Status status;
+  private Status status;
 
   public Task(String title, String description, Type type, Status status) {
     this.title = title;
@@ -23,6 +23,15 @@ public class Task {
     this.deadline = generateDeadline(type);
     this.type = type;
     this.status = status;
+  }
+
+  public Task(String title, String description, Type type) {
+    this.title = title;
+    this.description = description;
+    this.createdDate = LocalDateTime.now();
+    this.deadline = generateDeadline(type);
+    this.type = type;
+    this.status = Status.TO_DO;
   }
 
   private LocalDateTime generateDeadline(Type type) {
