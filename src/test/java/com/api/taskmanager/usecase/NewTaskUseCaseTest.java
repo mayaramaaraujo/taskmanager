@@ -1,8 +1,8 @@
 package com.api.taskmanager.usecase;
 
-import com.api.taskmanager.usecase.gateway.TaskVerifierGateway;
-import com.api.taskmanager.usecase.gateway.model.request.TaskSaverRequestModel;
-import com.api.taskmanager.usecase.gateway.model.response.TaskSaverResponseModel;
+import com.api.taskmanager.usecase.gateway.NewTaskVerifierGateway;
+import com.api.taskmanager.usecase.gateway.model.request.NewTaskVerifierRequestModel;
+import com.api.taskmanager.usecase.gateway.model.response.NewTaskVerifierResponseModel;
 import com.api.taskmanager.usecase.model.request.NewTaskRequestModel;
 import com.api.taskmanager.usecase.model.response.NewTaskResponseModel;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 public class NewTaskUseCaseTest {
 
   @Mock
-  TaskVerifierGateway taskVerifierGateway;
+  NewTaskVerifierGateway newTaskVerifierGateway;
 
   @InjectMocks
   NewTaskUseCase newTaskUseCase;
@@ -29,8 +29,8 @@ public class NewTaskUseCaseTest {
   public void given_ValidTaskRequestModel_shouldReturnSuccess() {
     NewTaskRequestModel requestModel = new NewTaskRequestModel("to do", "to do something", "URGENT");
 
-    TaskSaverResponseModel taskSaverResponseModel = new TaskSaverResponseModel(true, "");
-    when(taskVerifierGateway.verify(any(TaskSaverRequestModel.class))).thenReturn(taskSaverResponseModel);
+    NewTaskVerifierResponseModel newTaskVerifierResponseModel = new NewTaskVerifierResponseModel(true, "");
+    when(newTaskVerifierGateway.verify(any(NewTaskVerifierRequestModel.class))).thenReturn(newTaskVerifierResponseModel);
 
     NewTaskResponseModel responseModel = newTaskUseCase.execute(requestModel);
 
@@ -49,8 +49,8 @@ public class NewTaskUseCaseTest {
   public void given_ErrorOnTaskSaverGateway_shouldReturnError() {
     NewTaskRequestModel requestModel = new NewTaskRequestModel("title", "to do something", "URGENT");
 
-    TaskSaverResponseModel taskSaverResponseModel = new TaskSaverResponseModel(false, "Could not saver task");
-    when(taskVerifierGateway.verify(any(TaskSaverRequestModel.class))).thenReturn(taskSaverResponseModel);
+    NewTaskVerifierResponseModel newTaskVerifierResponseModel = new NewTaskVerifierResponseModel(false, "Could not saver task");
+    when(newTaskVerifierGateway.verify(any(NewTaskVerifierRequestModel.class))).thenReturn(newTaskVerifierResponseModel);
 
     NewTaskResponseModel responseModel = newTaskUseCase.execute(requestModel);
 
